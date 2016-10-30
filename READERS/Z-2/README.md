@@ -140,4 +140,9 @@ Device Status:     0x0000
     [110607.581273] usbcore: registered new interface driver ftdi_sio
     [110607.581389] usbserial: USB Serial support registered for FTDI USB Serial Device
     
-Драйвер загружен, но не ясно, видит ли он устройство.
+Драйвер загружен, но USB устройство он не видит, т.к. в логе
+`dmesg` больше ничего нет. По идее `usbserial` должен был
+создать `ttyUSB0` интерфейс, но его тоже нет:
+
+    $ sudo ls -la /dev/ttyU*
+    ls: cannot access '/dev/ttyU*': No such file or directory
