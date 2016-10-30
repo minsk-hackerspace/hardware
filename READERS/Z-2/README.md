@@ -146,3 +146,18 @@ Device Status:     0x0000
 
     $ sudo ls -la /dev/ttyU*
     ls: cannot access '/dev/ttyU*': No such file or directory
+
+На StackExchange откопалась
+[нужная информация](http://unix.stackexchange.com/questions/67936/attaching-usb-serial-device-with-custom-pid-to-ttyusb0-on-embedded). Драйверам `usb` устройств можно добавлять новые id
+для распознавания без пересборки драйвера:
+
+    sudo su -c "echo 0403 1234 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id"
+
+Подробное описание `new_id` нашлось в документации Linux Kernel
+https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-bus-usb
+
+    $ dmesg
+    ...
+    [143066.669704] ftdi_sio 7-2:1.0: FTDI USB Serial Device converter detected
+    [143066.670047] usb 7-2: Detected FT232RL
+    [143066.673310] usb 7-2: FTDI USB Serial Device converter now attached to ttyUSB0
