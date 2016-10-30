@@ -103,3 +103,41 @@ Device Status:     0x0000
 
  - https://wiki.debian.org/HowToIdentifyADevice/USB
  - http://www.beyondlogic.org/usbnutshell/usb5.shtml
+
+#### Часть вторая - вендор
+
+Знающие люди в рассылке хакерспейса подсказали, что ядро
+подгружает нужный модуль для общения с устройством по его
+идентификаторам `idVendor:idProduct`, которые в этом случае
+имеют значение `0403:1234`:
+
+    idVendor           0x0403 Future Technology Devices International, Ltd
+    idProduct          0x1234 IronLogic RFID Adapter [Z-2 USB]
+
+Получается, что IronLogic сделала продукт на основе чипа
+от FTDI. Можно поискать, какой модуль соответствует этим
+параметрам.
+
+Известные айдишники с именами модулей храняться в файле
+``/lib/modules/`uname -r`/modules.alias``, где `uname -r`
+будет именем текущего ядра. Файл генерируется автоматом,
+опрашивая модули на предмет того, что они поддерживают.
+Формат строк в файле `v0403p1234`, но таким образом он
+ничего не находит, зато поиск по вендору даёт результат:
+
+    $ less /lib/modules/`uname -r`/modules.alias | grep v0403
+    ...    
+    alias usb:v0403pFF00d*dc*dsc*dp*ic*isc*ip*in* ftdi_sio
+    alias usb:v0403pF60Bd*dc*dsc*dp*ic*isc*ip*in* ftdi_sio
+    ...
+
+Можно подгрузить модуль `ftdi_sio` вручную и посмотреть,
+что получится.
+
+    $ sudo modprobe ftdi_sio
+    $ dmesg
+    ...
+    [110607.581273] usbcore: registered new interface driver ftdi_sio
+    [110607.581389] usbserial: USB Serial support registered for FTDI USB Serial Device
+    
+Драйвер загружен, но не ясно, видит ли он устройство.
