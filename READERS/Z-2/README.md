@@ -151,7 +151,7 @@ Device Status:     0x0000
 [нужная информация](http://unix.stackexchange.com/questions/67936/attaching-usb-serial-device-with-custom-pid-to-ttyusb0-on-embedded). Драйверам `usb` устройств можно добавлять новые id
 для распознавания без пересборки драйвера:
 
-    sudo su -c "echo 0403 1234 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id"
+    $ sudo su -c "echo 0403 1234 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id"
 
 Подробное описание `new_id` нашлось в документации Linux Kernel
 https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-bus-usb
@@ -161,3 +161,56 @@ https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-bus-usb
     [143066.669704] ftdi_sio 7-2:1.0: FTDI USB Serial Device converter detected
     [143066.670047] usb 7-2: Detected FT232RL
     [143066.673310] usb 7-2: FTDI USB Serial Device converter now attached to ttyUSB0
+
+#### Часть третья - протокол
+
+Сначала надо проверить, что драйвер загружен. Это можно сделать
+из `user space` проверив, что `ftdi_sio` присутствует в списке
+`/proc/modules`. Если драйвера нет, его потребуется `root`,
+чтобы его включить:
+
+    $ sudo modprobe ftdi_sio
+    $ cat /proc/modules | grep ftdi_sio
+    ftdi_sio 53248 0 - Live 0x0000000000000000
+    usbserial 53248 1 ftdi_sio, Live 0x0000000000000000
+
+`0` говорит о том, что модуль загружен, но не используется
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/s2-proc-modules.html
+
+Затем надо скормить драйверу `vid pid` нового устройства,
+чтобы он его опознал и добавил интерфейс `/dev/ttyUSBx`. При
+этом `/proc/modules` показывает, что драйвер по прежнему не
+используется.
+
+    $ sudo su -c "echo 0403 1234 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id"
+    $ dmesg
+    ...
+    [125149.733270] usb 7-2: Detected FT232RL
+    [125149.736195] usb 7-2: FTDI USB Serial Device converter now attached to ttyUSB0
+    $ cat /proc/modules | grep ftdi_sio
+    ftdi_sio 53248 0 - Live 0x0000000000000000
+    usbserial 53248 1 ftdi_sio, Live 0x0000000000000000
+    
+Для работы с устройством нужен терминал, запущенный из-под
+`root`. Послав `i` (выдрано из мануала) на скорости 9600
+8-N-1 "no flow control" (оттуда же), можно получить
+информацию об устройстве:
+
+    $ sudo screen /dev/ttyUSB0
+
+    USB Z-2 ADAPTER S/N:48715 [0301]
+    CopyRight (C)2005 IronLogic, Saint-Petersburg,RUSSIA
+    www.ironlogic.ru ph. +7(095)78-77066,+7(812)542-04-80
+    Please send Email: marketing@ironlogic.ru
+    Software version: 0001
+
+Больше с ним ничего нельзя сделать. При поднесении меток,
+автоматически отсылается их стандарт и номер в формате
+Wiegand-26:
+
+    Mifare[625BD85D] 091,55389 1K (0004,08)
+    No card
+    Mifare[425BDE5D] 091,56925 1K (0004,08)
+    No card
+
+`No card` появляется, если метку убрать.
