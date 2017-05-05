@@ -8,5 +8,7 @@
 
 https://htmlpreview.github.io/?https://github.com/Motion-Project/motion/blob/release-4.0.1/motion_guide.html - описание опций конфига
 
-Для добавления новой камеры надо дописать в конце `motion.conf` путь к файлу конфига новой камеры и перезапустить motion.
+Для добавления новой камеры надо дописать в конце `motion.conf` путь к файлу конфига новой камеры и перезапустить motion - `sudo service motion restart`.
+
+Веб-сервер с камерами поднимается на Алисе на 8080 порту.
 
