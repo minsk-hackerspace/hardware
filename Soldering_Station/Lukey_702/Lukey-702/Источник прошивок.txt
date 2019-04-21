@@ -1,0 +1,39 @@
+Версии для Термофена Lykey 702 от Volly: 
+
+Luk702_fan_ver4.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=283750#283750 
+
+Luk702_fan_SE.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=284967#284967 
+
+Luk702_fan_SE.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=285427#285427 
+
+Luk702_fan_SE-2.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=286218#286218 
+
+Luk_fan_CC.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=322556#322556 
+
+
+
+Версии для паяльника Lykey 702 от Volly: 
+
+Luk702_sir.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=283973#283973 
+
+Luk702_sir-SE.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=284069#284069 
+
+Не уверен для чего именно данные прошивки. просьба Volly разъяснить. 
+
+Luk702_3sw.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=285056#285056 
+
+LUK702_sir_timer.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=286218#286218 
+
+
+
+Lukey852d+ 
+
+Firmw.rar находиться тут http://radiokot.ru/forum/viewtopic.php?p=351877#351877 
+
+
+---------------------------------------------------------------------------------------- 
+
+main.eep- файл EEPROM 
+main.hex - файл программы 
+
+Ревиззии прошивок идут с верху вниз то есть в верху самые первые в низу самые последние!
