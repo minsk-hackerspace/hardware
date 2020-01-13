@@ -1,21 +1,23 @@
-### Работа через LAN
+### Streaming over LAN
 
-Проектор умеет что-то делать по сети. Для этого он использует
-проприетарный софт Presenter Light в составе которого, однако,
-есть GPL лицензия.
+This Panasonic model supports streaming audio and images over wired
+LAN connection. It uses proprietary
+[Presenter Light](https://panasonic.net/cns/projector/download/application/presenter_light/)
+software. The software incorporates FSF source code under GPL, but
+doesn't ship with own source code, which is a violation of GPL.
+2020-01-12 I sent request for the source code to
+oss-cd-request@gg.jp.panasonic.com mentioned in the guide of
+Presenter Light.
 
-https://panasonic.net/cns/projector/download/application/presenter_light/
+Running software through `wine` + `wireshark` I could see that
+it bring up VNC server on 5900 of my machine, and projector
+connects to it. VNC client inside Panasonic projector probably
+uses modified RFB protocol for custom PIN based authentication
+and audio transfer. Wireshark was reporting unknown values and
+malformed packets after initial handshake.
 
-Я написал в суппорт о предоставлении исходников (2020-01-12),
-как того требует GPL. Если не забьют, то можно будет посмотреть
-протокол.
+Things to try:
 
-Через запуск тулзы через wine выяснилось, что она поднимает
-локально VNC сервер на 5900 порту, и проектор туда коннектится.
-Если разобрать сетевой пакет с командой проектору на коннект,
-то можно будет подцепить любой сервер.
-
-FPS, возможно, будет невысоким, но надо померять. Интересно
-протестить декодирование видео сразу в VNC буфер, чтобы проектор
-оттуда кормился. Как играется аудио поток - непонятно.
-
+ * Projector control without streaming
+   [with the help of Jesus Christ](https://github.com/byuoitav/panasonic-control-microservice/tree/master/helpers)
+ * PJLink (port 4352)
